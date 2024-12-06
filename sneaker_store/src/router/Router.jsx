@@ -1,4 +1,3 @@
-// src/router/Router.jsx
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SneakerWarehousePage from "../pages/Warehouse/pages/SneakerWarehousePage/SneakerWarehousePage";
@@ -19,79 +18,8 @@ import Layout from "../common/components/Layout/Layout";
 import ProtectedRoute from "./ProtectedRoute";
 import HomePage from "../pages/Home/HomePage";
 import Login from "../pages/Auth/Login/LoginPage";
-import RegisterPage from "../pages/Auth/Register/RegisterPage"; 
-import AuthPageLayout from "../pages/Auth/AuthPageLayout"; // Додаємо AuthPageLayout
-
-const SneakersRoutes = () => (
-  <Route path="sneakers" element={<SneakerListPageLayout />}>
-    <Route index element={<SneakerListPage />} />
-    <Route
-      path="brands"
-      element={
-        <ProtectedRoute allowedRoles={["Admin"]}>
-          <BrandPage />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="categories"
-      element={
-        <ProtectedRoute allowedRoles={["Admin"]}>
-          <CategoryPage />
-        </ProtectedRoute>
-      }
-    />
-  </Route>
-);
-
-const UsersRoutes = () => (
-  <Route
-    path="users"
-    element={
-      <ProtectedRoute allowedRoles={["Admin"]}>
-        <UserPageLayout />
-      </ProtectedRoute>
-    }
-  >
-    <Route index element={<UsersPage />} />
-    <Route path="roles" element={<RolePage />} />
-  </Route>
-);
-
-const OrdersRoutes = () => (
-  <Route path="orders" element={<OrderPageLayout />}>
-    <Route
-      index
-      element={
-        <ProtectedRoute allowedRoles={["Admin", "User"]}>
-          <OrderPage />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="status"
-      element={
-        <ProtectedRoute allowedRoles={["Admin"]}>
-          <StatusPage />
-        </ProtectedRoute>
-      }
-    />
-  </Route>
-);
-
-const WarehousesRoutes = () => (
-  <Route
-    path="warehouses"
-    element={
-      <ProtectedRoute allowedRoles={["Admin"]}>
-        <WarehousePageLayout />
-      </ProtectedRoute>
-    }
-  >
-    <Route index element={<WarehousePage />} />
-    <Route path="sneaker-warehouse" element={<SneakerWarehousePage />} />
-  </Route>
-);
+import RegisterPage from "../pages/Auth/Register/RegisterPage";
+import AuthPageLayout from "../pages/Auth/AuthPageLayout";
 
 const Router = () => {
   return (
@@ -99,14 +27,78 @@ const Router = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="auth" element={<AuthPageLayout />} />
+
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          {SneakersRoutes()}
-          {UsersRoutes()}
-          {OrdersRoutes()}
-          {WarehousesRoutes()}
+
+          <Route path="sneakers" element={<SneakerListPageLayout />}>
+            <Route index element={<SneakerListPage />} />
+            <Route
+              path="brands"
+              element={
+                <ProtectedRoute allowedRoles={["Admin"]}>
+                  <BrandPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="categories"
+              element={
+                <ProtectedRoute allowedRoles={["Admin"]}>
+                  <CategoryPage />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          <Route
+            path="users"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <UserPageLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<UsersPage />} />
+            <Route path="roles" element={<RolePage />} />
+          </Route>
+
+          <Route path="orders" element={<OrderPageLayout />}>
+            <Route
+              index
+              element={
+                <ProtectedRoute allowedRoles={["Admin", "User"]}>
+                  <OrderPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="status"
+              element={
+                <ProtectedRoute allowedRoles={["Admin"]}>
+                  <StatusPage />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          <Route
+            path="warehouses"
+            element={
+              <ProtectedRoute allowedRoles={["Admin"]}>
+                <WarehousePageLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<WarehousePage />} />
+            <Route
+              path="sneaker-warehouse"
+              element={<SneakerWarehousePage />}
+            />
+          </Route>
         </Route>
-        <Route path="auth" element={<AuthPageLayout />} /> {/* Додаємо сторінку для реєстрації та логіну */}
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

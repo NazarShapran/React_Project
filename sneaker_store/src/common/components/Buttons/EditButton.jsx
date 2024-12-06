@@ -4,11 +4,9 @@ import EditIcon from "@mui/icons-material/Edit";
 
 const EditButton = ({ onSubmit }) => {
   return (
-    <>
-      <IconButton aria-label="edit" onClick={onSubmit} color="primary">
-        <EditIcon />
-      </IconButton>
-    </>
+    <IconButton aria-label="edit" onClick={onSubmit} color="primary">
+      <EditIcon />
+    </IconButton>
   );
 };
 

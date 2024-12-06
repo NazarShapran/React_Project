@@ -3,13 +3,13 @@ import { HttpClient } from "../../../../../utils/http/HttpClient";
 export class SneakerService {
   constructor(signal) {
     this.httpClient = new HttpClient({
-      baseURL: `https://localhost:7144/sneakers`,
+      baseURL: `https://localhost:7144/sneaker`,
       timeout: 10000,
       signal,
     });
   }
   async getAllSneakers() {
-    return await this.httpClient.get("");
+    return await this.httpClient.get("/list");
   }
   async getSneakerById(id) {
     return await this.httpClient.get(`/${id}`);

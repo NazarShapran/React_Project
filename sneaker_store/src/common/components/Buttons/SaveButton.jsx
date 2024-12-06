@@ -5,15 +5,13 @@ import SaveIcon from "@mui/icons-material/Save";
 
 const SaveButton = ({ onSubmit }) => {
   return (
-    <>
-      <IconButton
-        aria-label="save"
-        onClick={onSubmit}
-        sx={{ color: lightGreen["A400"] }}
-      >
-        <SaveIcon />
-      </IconButton>
-    </>
+    <IconButton
+      aria-label="save"
+      onClick={onSubmit}
+      sx={{ color: lightGreen["A400"] }}
+    >
+      <SaveIcon />
+    </IconButton>
   );
 };
 

@@ -9,7 +9,7 @@ import BrandTable from "../components/BrandTable";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const BrandPage = () => {
+const BrandComponent = () => {
   const [newBrand, setNewBrand] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -108,4 +108,4 @@ const BrandPage = () => {
   );
 };
 
-export default BrandPage;
+export default BrandComponent;

@@ -4,11 +4,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const RemoveButton = ({ onSubmit }) => {
   return (
-    <>
-      <IconButton aria-label="delete" onClick={onSubmit} color="error">
-        <DeleteIcon />
-      </IconButton>
-    </>
+    <IconButton aria-label="delete" onClick={onSubmit} color="error">
+      <DeleteIcon />
+    </IconButton>
   );
 };
 

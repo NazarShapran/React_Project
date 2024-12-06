@@ -1,16 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import "./SneakerListPageStyle.css"; // Імпортуємо CSS файл
-
+import SneakerComponent from "./components/SneakerComponent";
+import "./SneakerListPageStyle.css";
 
 const SneakerListPage = () => {
   const location = useLocation();
 
-  return (
-    <>
-      {location.pathname === "/sneakers" && <div>SneakerListPage</div>}
-    </>
-  );
+  return <>{location.pathname === "/sneakers" && <SneakerComponent />}</>;
 };
 
 export default SneakerListPage;
