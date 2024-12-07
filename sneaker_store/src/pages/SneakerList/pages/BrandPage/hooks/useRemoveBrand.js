@@ -12,7 +12,6 @@ export const useRemoveBrand = (brands, setBrands) => {
         await brandService.deleteBrand(id);
         setBrands(brands.filter((brand) => brand.id !== id));
       } catch (error) {
-        console.log(error);
         if (error.response && error.response.status === 409) {
           setError(error.response.data);
         } else {

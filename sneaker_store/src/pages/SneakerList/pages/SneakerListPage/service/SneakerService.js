@@ -15,12 +15,12 @@ export class SneakerService {
     return await this.httpClient.get(`/${id}`);
   }
   async createSneaker(sneaker) {
-    return await this.httpClient.post("", sneaker);
+    return await this.httpClient.post("/create", sneaker);
   }
   async updateSneaker(sneaker) {
-    return await this.httpClient.put(`/${sneaker.id}`, sneaker);
+    return await this.httpClient.put("/update", sneaker);
   }
   async deleteSneaker(id) {
-    return await this.httpClient.delete(`/${id}`);
+    return await this.httpClient.delete(`/delete/${id}`);
   }
 }

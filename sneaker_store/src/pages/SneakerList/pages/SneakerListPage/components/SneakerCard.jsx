@@ -1,4 +1,5 @@
 import React from "react";
+import RemoveButton from "../../../../../common/components/Buttons/RemoveButton";
 import {
   Card,
   CardContent,
@@ -9,11 +10,11 @@ import {
   Box,
 } from "@mui/material";
 
-const SneakerCard = ({ sneakers, filteredSneakers }) => {
+const SneakerCard = ({ sneakers, setSneakers, onRemove, filteredSneakers }) => {
   const showSneakers =
     filteredSneakers?.length > 0 ? filteredSneakers : sneakers;
 
-  if (!showSneakers || showSneakers.length === 0) {
+  if (!filteredSneakers || filteredSneakers.length === 0) {
     return (
       <Typography
         variant="h6"
@@ -76,9 +77,7 @@ const SneakerCard = ({ sneakers, filteredSneakers }) => {
             <Button size="small" color="primary">
               Buy Now
             </Button>
-            <Button size="small" color="secondary">
-              Details
-            </Button>
+            <RemoveButton onSubmit={() => onRemove(sneaker.id)} />
           </CardActions>
         </Card>
       ))}

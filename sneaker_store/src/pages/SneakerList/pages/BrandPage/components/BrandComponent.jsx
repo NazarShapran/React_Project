@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useGetAllBrands } from "../hooks/useGetAllBrands";
 import { useRemoveBrand } from "../hooks/useRemoveBrand";
 import { useCreateBrand } from "../hooks/useCreateBrand";
@@ -15,57 +15,67 @@ const BrandComponent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const { brands, setBrands, loading, error } = useGetAllBrands();
+  const { brands, setBrands, loading } = useGetAllBrands();
   const { removeBrand } = useRemoveBrand(brands, setBrands);
   const { createBrand } = useCreateBrand();
 
-  function nandleNewNameChange(event) {
+  const handleNewNameChange = useCallback((event) => {
     setNewBrand({ name: event.target.value });
     setErrorMessage("");
-  }
+  }, []);
 
-  function handleSearchChange(event) {
+  const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
-  }
+  }, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!newBrand || !newBrand.name.trim()) {
-      setErrorMessage("Brand name cannot be empty.");
-      setOpenSnackbar(true);
-      return;
-    }
-    if (newBrand.name.trim().length < 3) {
-      setErrorMessage("The brand name must be at least 3 characters long.");
-      setOpenSnackbar(true);
-      return;
-    }
-    if (
-      brands.some(
-        (brand) => brand.name.toLowerCase() === newBrand.name.toLowerCase()
-      )
-    ) {
-      setErrorMessage("The brand name already exists.");
-      setOpenSnackbar(true);
-      return;
-    }
-    try {
-      const createdBrand = await createBrand(newBrand);
-      setBrands((prevBrands) => [...prevBrands, createdBrand]);
-      setNewBrand(null);
-      setErrorMessage("");
-    } catch (error) {
-      console.error("Error creating brand:", error.message || "Unknown error");
-    }
-  };
-
-  const filteredBrands = brands.filter((brand) =>
-    brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      if (!newBrand || !newBrand.name.trim()) {
+        setErrorMessage("Brand name cannot be empty.");
+        setOpenSnackbar(true);
+        return;
+      }
+      if (newBrand.name.trim().length < 3) {
+        setErrorMessage("The brand name must be at least 3 characters long.");
+        setOpenSnackbar(true);
+        return;
+      }
+      if (
+        brands.some(
+          (brand) => brand.name.toLowerCase() === newBrand.name.toLowerCase()
+        )
+      ) {
+        setErrorMessage("The brand name already exists.");
+        setOpenSnackbar(true);
+        return;
+      }
+      try {
+        const createdBrand = await createBrand(newBrand);
+        setBrands((prevBrands) => [...prevBrands, createdBrand]);
+        setNewBrand(null);
+        setErrorMessage("");
+      } catch (error) {
+        console.error(
+          "Error creating brand:",
+          error.message || "Unknown error"
+        );
+      }
+    },
+    [newBrand, brands, createBrand, setBrands]
   );
 
-  const handleCloseSnackbar = () => {
+  const filteredBrands = useMemo(
+    () =>
+      brands.filter((brand) =>
+        brand.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [brands, searchTerm]
+  );
+
+  const handleCloseSnackbar = useCallback(() => {
     setOpenSnackbar(false);
-  };
+  }, []);
 
   return (
     <>
@@ -79,14 +89,12 @@ const BrandComponent = () => {
           <Alert severity="error" onClose={handleCloseSnackbar}>
             {errorMessage}
           </Alert>
-        ) : (
-          <div></div>
-        )}
+        ) : null}
       </Snackbar>
 
       <CreateBrand
         name={newBrand?.name}
-        onNameChange={nandleNewNameChange}
+        onNameChange={handleNewNameChange}
         onSubmit={handleSubmit}
       />
 
@@ -108,4 +116,4 @@ const BrandComponent = () => {
   );
 };
 
-export default BrandComponent;
+export default React.memo(BrandComponent);
