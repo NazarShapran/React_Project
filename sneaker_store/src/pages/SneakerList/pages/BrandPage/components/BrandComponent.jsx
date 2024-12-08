@@ -1,7 +1,5 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { useGetAllBrands } from "../hooks/useGetAllBrands";
-import { useRemoveBrand } from "../hooks/useRemoveBrand";
-import { useCreateBrand } from "../hooks/useCreateBrand";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
+import { useBrandReducer } from "../hooks/useBrandReducer";
 import SearchBar from "../../../../../common/components/SearchBar/SearchBar";
 import Loader from "../../../../../common/components/Loader/Loader";
 import CreateBrand from "../components/CreateBrand";
@@ -10,14 +8,18 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 const BrandComponent = () => {
+  const { state, fetchBrands, addBrand, updateBrand, removeBrand } =
+    useBrandReducer();
+  const { brands, loading, error } = state;
+
   const [newBrand, setNewBrand] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const { brands, setBrands, loading } = useGetAllBrands();
-  const { removeBrand } = useRemoveBrand(brands, setBrands);
-  const { createBrand } = useCreateBrand();
+  useEffect(() => {
+    fetchBrands();
+  }, [fetchBrands]);
 
   const handleNewNameChange = useCallback((event) => {
     setNewBrand({ name: event.target.value });
@@ -31,6 +33,7 @@ const BrandComponent = () => {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
+
       if (!newBrand || !newBrand.name.trim()) {
         setErrorMessage("Brand name cannot be empty.");
         setOpenSnackbar(true);
@@ -50,19 +53,17 @@ const BrandComponent = () => {
         setOpenSnackbar(true);
         return;
       }
-      try {
-        const createdBrand = await createBrand(newBrand);
-        setBrands((prevBrands) => [...prevBrands, createdBrand]);
+
+      const success = await addBrand(newBrand.name);
+      if (success) {
         setNewBrand(null);
         setErrorMessage("");
-      } catch (error) {
-        console.error(
-          "Error creating brand:",
-          error.message || "Unknown error"
-        );
+      } else {
+        setErrorMessage("Failed to add brand.");
+        setOpenSnackbar(true);
       }
     },
-    [newBrand, brands, createBrand, setBrands]
+    [newBrand, brands, addBrand]
   );
 
   const filteredBrands = useMemo(
@@ -85,11 +86,9 @@ const BrandComponent = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        {errorMessage ? (
-          <Alert severity="error" onClose={handleCloseSnackbar}>
-            {errorMessage}
-          </Alert>
-        ) : null}
+        <Alert severity="error" onClose={handleCloseSnackbar}>
+          {errorMessage || error}
+        </Alert>
       </Snackbar>
 
       <CreateBrand
@@ -108,8 +107,8 @@ const BrandComponent = () => {
         <BrandTable
           brands={brands}
           onRemove={removeBrand}
-          setBrands={setBrands}
           filteredBrands={filteredBrands}
+          updateBrand={updateBrand}
         />
       </Loader>
     </>

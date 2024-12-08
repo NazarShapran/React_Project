@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useEditBrand } from "../hooks/useEditBrand";
+import React, { useState } from "react";
 import TableRow from "./TableRow";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-const BrandTable = ({ brands, setBrands, onRemove, filteredBrands }) => {
+const BrandTable = ({ brands, onRemove, filteredBrands, updateBrand }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const { updateBrand, loading, error } = useEditBrand(brands, setBrands);
 
   const handleValidationError = (message) => {
     setAlertMessage(message);
     setOpenSnackbar(true);
   };
-
-  useEffect(() => {
-    if (error) {
-      setAlertMessage(error);
-      setOpenSnackbar(true);
-    }
-  }, [error]);
 
   const handleCloseSnackbar = () => setOpenSnackbar(false);
 
