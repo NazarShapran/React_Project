@@ -1,15 +1,17 @@
+import React from "react";
 import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
+import { searchInputContext } from "../../context/searchInput/searhInputContext";
 
-const SearchBar = ({ value, onChange, placeholder }) => {
+const SearchBar = ({ placeholder }) => {
+  const { searchTerm, handleSearchChange } = searchInputContext();
   return (
     <Box component="form" noValidate autoComplete="off" sx={{ mt: 1 }}>
       <TextField
         id="search"
         label={placeholder}
-        value={value}
-        onChange={onChange}
+        value={searchTerm}
+        onChange={handleSearchChange}
         variant="outlined"
       />
     </Box>

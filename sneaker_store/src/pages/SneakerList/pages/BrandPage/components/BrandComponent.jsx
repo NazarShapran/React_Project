@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useBrandReducer } from "../hooks/useBrandReducer";
+import { searchInputContext } from "../../../../../common/context/searchInput/searhInputContext";
 import SearchBar from "../../../../../common/components/SearchBar/SearchBar";
 import Loader from "../../../../../common/components/Loader/Loader";
 import CreateBrand from "../components/CreateBrand";
@@ -11,9 +12,9 @@ const BrandComponent = () => {
   const { state, fetchBrands, addBrand, updateBrand, removeBrand } =
     useBrandReducer();
   const { brands, loading, error } = state;
+  const { searchTerm } = searchInputContext();
 
   const [newBrand, setNewBrand] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -97,11 +98,7 @@ const BrandComponent = () => {
         onSubmit={handleSubmit}
       />
 
-      <SearchBar
-        value={searchTerm}
-        onChange={handleSearchChange}
-        placeholder="Search brands..."
-      />
+      <SearchBar placeholder="Search brands..." />
 
       <Loader loading={loading}>
         <BrandTable
