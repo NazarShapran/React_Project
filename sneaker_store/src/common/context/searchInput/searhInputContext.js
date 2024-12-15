@@ -1,15 +1,25 @@
 import { createContext, useContext } from "react";
 
-export const SearchInputContext = createContext();
+export const SearchInputContext = createContext({
+  searchTerm: "",
+  handleSearchChange: () => {},
+});
 
-export const searchInputContext = () => {
+export const useSearchInputContext = () => {
   const context = useContext(SearchInputContext);
 
   if (!context) {
-    throw new Error(
-      "useSearchInputContext must be used within a SearchInputContextProvider"
+    console.warn(
+      "useSearchInputContext: No context provided. Ensure your application is wrapped in SearchInputContextProvider."
     );
+
+    return {
+      searchTerm: "",
+      handleSearchChange: () => {},
+    };
   }
+
   return context;
-}
+};
+
 export default SearchInputContext;

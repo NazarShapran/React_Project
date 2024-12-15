@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { useBrandReducer } from "../hooks/useBrandReducer";
-import { searchInputContext } from "../../../../../common/context/searchInput/searhInputContext";
+import { useSearchInputContext } from "../../../../../common/context/searchInput/searhInputContext";
 import SearchBar from "../../../../../common/components/SearchBar/SearchBar";
 import Loader from "../../../../../common/components/Loader/Loader";
 import CreateBrand from "../components/CreateBrand";
@@ -12,7 +12,7 @@ const BrandComponent = () => {
   const { state, fetchBrands, addBrand, updateBrand, removeBrand } =
     useBrandReducer();
   const { brands, loading, error } = state;
-  const { searchTerm } = searchInputContext();
+  const { searchTerm } = useSearchInputContext();
 
   const [newBrand, setNewBrand] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,10 +25,6 @@ const BrandComponent = () => {
   const handleNewNameChange = useCallback((event) => {
     setNewBrand({ name: event.target.value });
     setErrorMessage("");
-  }, []);
-
-  const handleSearchChange = useCallback((event) => {
-    setSearchTerm(event.target.value);
   }, []);
 
   const handleSubmit = useCallback(
